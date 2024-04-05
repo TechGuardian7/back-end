@@ -2,7 +2,6 @@
 
 ### Instruções para executar IA
 
-```markdown
 #### Detecção de Pessoas com YOLOv5
 
 Este é um projeto de detecção de pessoas usando YOLOv5, uma rede neural para detecção de objetos em tempo real.
@@ -13,6 +12,7 @@ Certifique-se de ter o Python instalado em sua máquina. Você pode baixá-lo e 
 
 Além disso, você precisa ter o OpenCV e o PyTorch instalados. Você pode instalá-los executando:
 
+```markdown
 ```bash
 pip install opencv-python torch torchvision
 ```
@@ -46,5 +46,5 @@ Isso iniciará a detecção de pessoas em tempo real usando a webcam do seu comp
 #### Notas
 
 - Certifique-se de ter uma webcam conectada ao seu computador.
-- Este código foi testado no Python 3.8.
-```
+- Este código foi testado no Python 3.9.
+
