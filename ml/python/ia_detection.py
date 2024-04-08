@@ -26,14 +26,14 @@ while True:
             cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), (0, 255, 0), 2)
             
             if x1 < 10: 
-                pessoas_entrada[i] = True
+                pessoas_entrada[i] = datetime.now()
             elif x2 > frame.shape[1] - 10 and pessoas_entrada.get(i): 
-                print(f"Entrada: {datetime.now()} Quant: 1")
+                print({"Registro": "Entrada", "Data": datetime.now().date(), "Hora": datetime.now().time(), "Quant": 1})
                 del pessoas_entrada[i]
             if x2 > frame.shape[1] - 10:
-                pessoas_saida[i] = True
+                pessoas_saida[i] = datetime.now()
             elif x1 < 10 and pessoas_saida.get(i):
-                print(f"Saida: {datetime.now()} Quant: 1")
+                print({"Registro": "Saída", "Data": datetime.now().date(), "Hora": datetime.now().time(), "Quant": 1})
                 del pessoas_saida[i]
 
     # Exibir o número de pessoas na imagem
