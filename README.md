@@ -28,7 +28,7 @@ git clone https://github.com/seu-usuario/back-end.git
 2. Navegue até o diretório do projeto:
 
 ```bash
-cd cd back-end/src/main/python
+cd cd back-end/ml/python
 ```
 
 3. Execute o script Python:
