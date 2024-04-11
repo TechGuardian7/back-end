@@ -1,5 +1,6 @@
 import cv2
 import torch
+import requests
 from datetime import datetime
 
 # Carregar o modelo pré-treinado
@@ -28,12 +29,18 @@ while True:
             if x1 < 10: 
                 pessoas_entrada[i] = datetime.now()
             elif x2 > frame.shape[1] - 10 and pessoas_entrada.get(i): 
-                print({"Registro": "Entrada", "Data": datetime.now().date(), "Hora": datetime.now().time(), "Quant": 1})
+                data_entrada = {"dataEntrada": str(datetime.now().date()), "horaEntrada": str(datetime.now().time()), "quantEntrada": 1, "obsEntrada": "Observações, se houver"}
+                response_entrada = requests.post('http://localhost:8080/entrada', json=data_entrada)
+                if response_entrada.status_code == 200:
+                    print("Registro de entrada enviado com sucesso")
                 del pessoas_entrada[i]
             if x2 > frame.shape[1] - 10:
                 pessoas_saida[i] = datetime.now()
             elif x1 < 10 and pessoas_saida.get(i):
-                print({"Registro": "Saída", "Data": datetime.now().date(), "Hora": datetime.now().time(), "Quant": 1})
+                data_saida = {"dataSaida": str(datetime.now().date()), "horaSaida": str(datetime.now().time()), "quantSaida": 1, "obsSaida": "Observações, se houver"}
+                response_saida = requests.post('http://localhost:8080/saida', json=data_saida)
+                if response_saida.status_code == 200:
+                    print("Registro de saída enviado com sucesso")
                 del pessoas_saida[i]
 
     # Exibir o número de pessoas na imagem
