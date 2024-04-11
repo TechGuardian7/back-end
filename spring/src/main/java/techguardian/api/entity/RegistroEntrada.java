@@ -24,6 +24,9 @@ public class RegistroEntrada {
 
     @Column(name = "hora_entrada")
     private Time horaEntrada;
+
+    @Column(name = "quant_entrada")
+    private Integer quantEntrada;
     
     @Column(name = "obs_entrada")
     private String obsEntrada;
@@ -50,6 +53,14 @@ public class RegistroEntrada {
 
     public void setHoraEntrada(Time horaEntrada) {
         this.horaEntrada = horaEntrada;
+    }
+
+    public Integer getQuantEntrada() {
+        return quantEntrada;
+    }
+
+    public void setQuantEntrada(Integer quantEntrada) {
+        this.quantEntrada = quantEntrada;
     }
 
     public String getObsEntrada() {

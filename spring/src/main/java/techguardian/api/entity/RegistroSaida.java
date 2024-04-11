@@ -24,6 +24,9 @@ public class RegistroSaida {
 
     @Column(name = "hora_saida")
     private Time horaSaida;
+
+    @Column(name = "quantSaida")
+    private Integer quantSaida;
     
     @Column(name = "obs_saida")
     private String obsSaida;
@@ -50,6 +53,14 @@ public class RegistroSaida {
 
     public void setHoraSaida(Time horaSaida) {
         this.horaSaida = horaSaida;
+    }
+
+    public Integer getQuantSaida() {
+        return quantSaida;
+    }
+
+    public void setQuantSaida(Integer quantSaida) {
+        this.quantSaida = quantSaida;
     }
 
     public String getObsSaida() {
