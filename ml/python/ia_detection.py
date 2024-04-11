@@ -28,12 +28,12 @@ while True:
             if x1 < 10: 
                 pessoas_entrada[i] = datetime.now()
             elif x2 > frame.shape[1] - 10 and pessoas_entrada.get(i): 
-                print({"Registro": "Entrada", "Data": datetime.now().date(), "Hora": datetime.now().time(), "Quant": 1})
+                print({"Registro": "Entrada", "Data": datetime.now().strftime('%d-%m-%Y'), "Hora": datetime.now().strftime('%H:%M:%S'), "Quant": 1})
                 del pessoas_entrada[i]
             if x2 > frame.shape[1] - 10:
                 pessoas_saida[i] = datetime.now()
             elif x1 < 10 and pessoas_saida.get(i):
-                print({"Registro": "Saída", "Data": datetime.now().date(), "Hora": datetime.now().time(), "Quant": 1})
+                print({"Registro": "Saída", "Data": datetime.now().strftime('%d-%m-%Y'), "Hora": datetime.now().strftime('%H:%M:%S'), "Quant": 1})
                 del pessoas_saida[i]
 
     # Exibir o número de pessoas na imagem
