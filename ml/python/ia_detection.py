@@ -1,6 +1,7 @@
 import cv2
 import torch
 import requests
+import json
 from datetime import datetime
 
 # Carregar o modelo pré-treinado
@@ -25,22 +26,22 @@ while True:
         if cls == 0 and conf > 0.7:  # Verificar se é uma pessoa com alta confiança 70% (ajuste aqui para melhorar detecção)
             pessoas += 1
             cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), (0, 255, 0), 2)
-            
+
             if x1 < 10: 
                 pessoas_entrada[i] = datetime.now()
             elif x2 > frame.shape[1] - 10 and pessoas_entrada.get(i): 
-                data_entrada = {"dataEntrada": str(datetime.now().date()), "horaEntrada": str(datetime.now().time()), "quantEntrada": 1, "obsEntrada": "Observações, se houver"}
+                data_entrada = {"dataEntrada": str(datetime.now().date()), "horaEntrada": datetime.now().strftime("%H:%M:%S"), "quantEntrada": 1, "obsEntrada": "Observacao, se houver"}
                 response_entrada = requests.post('http://localhost:8080/entrada', json=data_entrada)
-                if response_entrada.status_code == 200:
-                    print("Registro de entrada enviado com sucesso")
+                print("Dados de entrada:")
+                print(json.dumps(data_entrada, indent=4))
                 del pessoas_entrada[i]
             if x2 > frame.shape[1] - 10:
                 pessoas_saida[i] = datetime.now()
             elif x1 < 10 and pessoas_saida.get(i):
-                data_saida = {"dataSaida": str(datetime.now().date()), "horaSaida": str(datetime.now().time()), "quantSaida": 1, "obsSaida": "Observações, se houver"}
+                data_saida = {"dataSaida": str(datetime.now().date()), "horaSaida": datetime.now().strftime("%H:%M:%S"), "quantSaida": 1, "obsSaida": "Observacao, se houver"}
                 response_saida = requests.post('http://localhost:8080/saida', json=data_saida)
-                if response_saida.status_code == 200:
-                    print("Registro de saída enviado com sucesso")
+                print("Dados de saída:")
+                print(json.dumps(data_saida, indent=4))
                 del pessoas_saida[i]
 
     # Exibir o número de pessoas na imagem
