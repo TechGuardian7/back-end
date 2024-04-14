@@ -12,17 +12,17 @@ use techguardian;
 
 create table registro_entrada (
     ent_id bigint not null auto_increment,
-    data_entrada date not null,
-    hora_entrada time not null, 
+    data_entrada varchar(10) not null,
+    hora_entrada varchar(10) not null, 
     quant_entrada int not null,
-    obs_entrada varchar(150),
+    obs_entrada varchar(250),
     primary key (ent_id)
 );
 
 create table registro_saida (
     sai_id bigint not null auto_increment,
-    data_saida date not null,
-    hora_saida time not null,
+    data_saida varchar(10) not null,
+    hora_saida varchar(10) not null,
     quant_saida int not null,
     obs_saida varchar(150),
     primary key (sai_id)

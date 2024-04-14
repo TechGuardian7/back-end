@@ -7,27 +7,26 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import techguardian.api.dto.DadosSaida;
 import techguardian.api.entity.RegistroSaida;
 import techguardian.api.service.SaidaService;
 
 @RestController
-@RequestMapping(value = "/saida")
 @CrossOrigin
 public class SaidaController {
 
     @Autowired
-    private SaidaService service;
+    private SaidaService saidaService;
 
-    @GetMapping
+    @GetMapping("/registro/saida")
     public List<RegistroSaida> buscarTodos() {
-        return service.buscarTodos();
+        return saidaService.buscarTodos();
     }
 
-    @PostMapping
-    public RegistroSaida novaSaida(@RequestBody RegistroSaida saida) {
-        return service.novaSaida(saida);
+    @PostMapping("/saida")
+    public void receberDadosSaida(@RequestBody DadosSaida dadosSaida) {
+        saidaService.processarDadosSaida(dadosSaida);
     }
 }

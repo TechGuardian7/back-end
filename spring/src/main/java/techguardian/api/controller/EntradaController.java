@@ -7,27 +7,27 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import techguardian.api.dto.DadosEntrada;
 import techguardian.api.entity.RegistroEntrada;
 import techguardian.api.service.EntradaService;
 
 @RestController
-@RequestMapping(value = "/entrada")
 @CrossOrigin
 public class EntradaController {
 
     @Autowired
-    private EntradaService service;
+    private EntradaService entradaService;
 
-    @GetMapping
+    @GetMapping("/registro/entrada")
     public List<RegistroEntrada> buscarTodos() {
-        return service.buscarTodos();
+        return entradaService.buscarTodos();
     }
 
-    @PostMapping
-    public RegistroEntrada novaEntrada(@RequestBody RegistroEntrada entrada) {
-        return service.novaEntrada(entrada);
+    @PostMapping("/entrada")
+    public void receberDadosEntrada(@RequestBody DadosEntrada dadosEntrada) {
+        entradaService.processarDadosEntrada(dadosEntrada);
     }
+
 }
