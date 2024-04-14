@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import techguardian.api.dto.DadosEntrada;
 import techguardian.api.entity.RegistroEntrada;
 import techguardian.api.repository.EntradaRepository;
 
@@ -16,14 +17,15 @@ public class EntradaService {
 
     public List<RegistroEntrada> buscarTodos() {
         return entradaRepo.findAll();
-        }
+    }
 
-    public RegistroEntrada novaEntrada(RegistroEntrada registro) {
-        if(registro == null ||
-        registro.getDataEntrada() == null ||
-        registro.getHoraEntrada() == null) {
-        throw new IllegalArgumentException("Registro Inválido!");
-        }
-        return entradaRepo.save(registro);
-        }
+    public void processarDadosEntrada(DadosEntrada dadosEntrada) {
+        RegistroEntrada registroEntrada = new RegistroEntrada();
+        registroEntrada.setDataEntrada(dadosEntrada.getDataEntrada());
+        registroEntrada.setHoraEntrada(dadosEntrada.getHoraEntrada());
+        registroEntrada.setQuantEntrada(dadosEntrada.getQuantEntrada());
+        registroEntrada.setObsEntrada(dadosEntrada.getObsEntrada());
+
+        entradaRepo.save(registroEntrada);
+    }
 }
