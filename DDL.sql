@@ -24,7 +24,7 @@ create table registro_saida (
     data_saida varchar(10) not null,
     hora_saida varchar(10) not null,
     quant_saida int not null,
-    obs_saida varchar(150),
+    obs_saida varchar(250),
     primary key (sai_id)
 );
 
