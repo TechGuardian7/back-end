@@ -44,4 +44,13 @@ public class EntradaService {
             throw new NoSuchElementException("Entrada com o ID " + id + " não encontrada");
         }
     }
+
+    public void deletarEntrada(Long id) {
+        Optional<RegistroEntrada> optionalEntrada = entradaRepo.findById(id);
+        if (optionalEntrada.isPresent()) {
+            entradaRepo.deleteById(id);
+        } else {
+            throw new NoSuchElementException("Entrada com o ID " + id + " não encontrada");
+        }
+    }
 }
