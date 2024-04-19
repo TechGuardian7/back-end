@@ -15,37 +15,37 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import techguardian.api.dto.DadosSaida;
-import techguardian.api.entity.RegistroSaida;
-import techguardian.api.service.SaidaService;
+import techguardian.api.dto.OutputDTO;
+import techguardian.api.entity.Output;
+import techguardian.api.service.OutputService;
 
 @RestController
 @CrossOrigin
-public class SaidaController {
+public class OutputController {
 
     @Autowired
-    private SaidaService saidaService;
+    private OutputService saidaService;
 
     @GetMapping("/registro/saida")
-    public List<RegistroSaida> buscarTodos() {
-        return saidaService.buscarTodos();
+    public List<Output> findAll() {
+        return saidaService.findAll();
     }
 
     @PostMapping("/saida")
-    public void receberDadosSaida(@RequestBody DadosSaida dadosSaida) {
-        saidaService.processarDadosSaida(dadosSaida);
+    public void createOutput(@RequestBody OutputDTO dadosSaida) {
+        saidaService.createOutput(dadosSaida);
     }
 
     @PutMapping("/saida/{id}")
-    public ResponseEntity<String> atualizarSaida(@PathVariable Long id, @RequestBody DadosSaida dadosSaida) {
-        saidaService.atualizarSaida(id, dadosSaida);
+    public ResponseEntity<String> updateOutput(@PathVariable Long id, @RequestBody OutputDTO dadosSaida) {
+        saidaService.updateOutput(id, dadosSaida);
         return ResponseEntity.ok("Saida atualizada com sucesso");
     }
 
     @DeleteMapping("/saida/{id}")
-    public ResponseEntity<String> deletarSaida(@PathVariable Long id) {
+    public ResponseEntity<String> deleteOutput(@PathVariable Long id) {
         try {
-            saidaService.deletarSaida(id);
+            saidaService.deleteOutput(id);
             return ResponseEntity.ok("Saida com o ID " + id + " foi deletada com sucesso.");
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

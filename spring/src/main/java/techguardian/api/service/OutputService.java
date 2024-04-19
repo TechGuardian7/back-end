@@ -7,22 +7,22 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import techguardian.api.dto.DadosSaida;
-import techguardian.api.entity.RegistroSaida;
-import techguardian.api.repository.SaidaRepository;
+import techguardian.api.dto.OutputDTO;
+import techguardian.api.entity.Output;
+import techguardian.api.repository.OutputRepository;
 
 @Service
-public class SaidaService {
+public class OutputService {
 
     @Autowired
-    private SaidaRepository saidaRepo;
+    private OutputRepository saidaRepo;
 
-    public List<RegistroSaida> buscarTodos() {
+    public List<Output> findAll() {
         return saidaRepo.findAll();
     }
 
-    public void processarDadosSaida(DadosSaida dadosSaida) {
-        RegistroSaida registroSaida = new RegistroSaida();
+    public void createOutput(OutputDTO dadosSaida) {
+        Output registroSaida = new Output();
         registroSaida.setDataSaida(dadosSaida.getDataSaida());
         registroSaida.setHoraSaida(dadosSaida.getHoraSaida());
         registroSaida.setQuantSaida(dadosSaida.getQuantSaida());
@@ -31,10 +31,10 @@ public class SaidaService {
         saidaRepo.save(registroSaida);
     }
 
-    public void atualizarSaida(Long id, DadosSaida dadosSaida) {
-        Optional<RegistroSaida> optionalEntrada = saidaRepo.findById(id);
+    public void updateOutput(Long id, OutputDTO dadosSaida) {
+        Optional<Output> optionalEntrada = saidaRepo.findById(id);
         if (optionalEntrada.isPresent()) {
-            RegistroSaida entradaExistente = optionalEntrada.get();
+            Output entradaExistente = optionalEntrada.get();
             entradaExistente.setDataSaida(dadosSaida.getDataSaida());
             entradaExistente.setHoraSaida(dadosSaida.getHoraSaida());
             entradaExistente.setQuantSaida(dadosSaida.getQuantSaida());
@@ -45,8 +45,8 @@ public class SaidaService {
         }
     }
 
-    public void deletarSaida(Long id) {
-        Optional<RegistroSaida> optionalSaida = saidaRepo.findById(id);
+    public void deleteOutput(Long id) {
+        Optional<Output> optionalSaida = saidaRepo.findById(id);
         if (optionalSaida.isPresent()) {
             saidaRepo.deleteById(id);
         } else {

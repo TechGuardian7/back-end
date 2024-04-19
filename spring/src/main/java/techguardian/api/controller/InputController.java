@@ -15,37 +15,37 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import techguardian.api.dto.DadosEntrada;
-import techguardian.api.entity.RegistroEntrada;
-import techguardian.api.service.EntradaService;
+import techguardian.api.dto.InputDTO;
+import techguardian.api.entity.Input;
+import techguardian.api.service.InputService;
 
 @RestController
 @CrossOrigin
-public class EntradaController {
+public class InputController {
 
     @Autowired
-    private EntradaService entradaService;
+    private InputService entradaService;
 
     @GetMapping("/registro/entrada")
-    public List<RegistroEntrada> buscarTodos() {
-        return entradaService.buscarTodos();
+    public List<Input> findAll() {
+        return entradaService.findAll();
     }
 
     @PostMapping("/entrada")
-    public void receberDadosEntrada(@RequestBody DadosEntrada dadosEntrada) {
-        entradaService.processarDadosEntrada(dadosEntrada);
+    public void createInput(@RequestBody InputDTO dadosEntrada) {
+        entradaService.createInput(dadosEntrada);
     }
 
     @PutMapping("/entrada/{id}")
-    public ResponseEntity<String> atualizarEntrada(@PathVariable Long id, @RequestBody DadosEntrada dadosEntrada) {
-        entradaService.atualizarEntrada(id, dadosEntrada);
+    public ResponseEntity<String> updateInput(@PathVariable Long id, @RequestBody InputDTO dadosEntrada) {
+        entradaService.updateInput(id, dadosEntrada);
         return ResponseEntity.ok("Entrada atualizada com sucesso");
     }
 
     @DeleteMapping("/entrada/{id}")
-    public ResponseEntity<String> deletarEntrada(@PathVariable Long id) {
+    public ResponseEntity<String> deleteInput(@PathVariable Long id) {
         try {
-            entradaService.deletarEntrada(id);
+            entradaService.deleteInput(id);
             return ResponseEntity.ok("Entrada com o ID " + id + " foi deletada com sucesso.");
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

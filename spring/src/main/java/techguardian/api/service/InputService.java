@@ -7,22 +7,22 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import techguardian.api.dto.DadosEntrada;
-import techguardian.api.entity.RegistroEntrada;
-import techguardian.api.repository.EntradaRepository;
+import techguardian.api.dto.InputDTO;
+import techguardian.api.entity.Input;
+import techguardian.api.repository.InputRepository;
 
 @Service
-public class EntradaService {
+public class InputService {
 
     @Autowired
-    private EntradaRepository entradaRepo;
+    private InputRepository entradaRepo;
 
-    public List<RegistroEntrada> buscarTodos() {
+    public List<Input> findAll() {
         return entradaRepo.findAll();
     }
 
-    public void processarDadosEntrada(DadosEntrada dadosEntrada) {
-        RegistroEntrada registroEntrada = new RegistroEntrada();
+    public void createInput(InputDTO dadosEntrada) {
+        Input registroEntrada = new Input();
         registroEntrada.setDataEntrada(dadosEntrada.getDataEntrada());
         registroEntrada.setHoraEntrada(dadosEntrada.getHoraEntrada());
         registroEntrada.setQuantEntrada(dadosEntrada.getQuantEntrada());
@@ -31,10 +31,10 @@ public class EntradaService {
         entradaRepo.save(registroEntrada);
     }
 
-    public void atualizarEntrada(Long id, DadosEntrada dadosEntrada) {
-        Optional<RegistroEntrada> optionalEntrada = entradaRepo.findById(id);
+    public void updateInput(Long id, InputDTO dadosEntrada) {
+        Optional<Input> optionalEntrada = entradaRepo.findById(id);
         if (optionalEntrada.isPresent()) {
-            RegistroEntrada entradaExistente = optionalEntrada.get();
+            Input entradaExistente = optionalEntrada.get();
             entradaExistente.setDataEntrada(dadosEntrada.getDataEntrada());
             entradaExistente.setHoraEntrada(dadosEntrada.getHoraEntrada());
             entradaExistente.setQuantEntrada(dadosEntrada.getQuantEntrada());
@@ -45,8 +45,8 @@ public class EntradaService {
         }
     }
 
-    public void deletarEntrada(Long id) {
-        Optional<RegistroEntrada> optionalEntrada = entradaRepo.findById(id);
+    public void deleteInput(Long id) {
+        Optional<Input> optionalEntrada = entradaRepo.findById(id);
         if (optionalEntrada.isPresent()) {
             entradaRepo.deleteById(id);
         } else {
