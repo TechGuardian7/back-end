@@ -5,7 +5,7 @@ import json
 from ultralytics import YOLO
 
 # Carregar o modelo YOLOv8 com ultralytics
-model_path = "C:/YOLO/pretrained_models/yolov5s.pt"
+model_path = "ml\python\models\yolov5s.pt"
 model = YOLO(model_path)  # Carregar o modelo
 
 # Iniciar a captura de vídeo
