@@ -1,6 +1,6 @@
 package techguardian.api.dto;
 
-public class DadosEntrada {
+public class InputDTO {
 
     private String dataEntrada;
     private String horaEntrada;

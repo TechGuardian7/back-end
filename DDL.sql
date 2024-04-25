@@ -24,11 +24,11 @@ create table registro_saida (
     data_saida varchar(10) not null,
     hora_saida varchar(10) not null,
     quant_saida int not null,
-    obs_saida varchar(150),
+    obs_saida varchar(250),
     primary key (sai_id)
 );
 
 insert into registro_entrada (ent_id, data_entrada, hora_entrada, quant_entrada, obs_entrada)
     values (1, '2024-04-03', '19:10:00', '1', 'registrando a entrada');
 insert into registro_saida (sai_id, data_saida, hora_saida, quant_saida, obs_saida)
-    values (1, '2024-04-02', '19:20:00', '1,' 'registrando a saida');
+    values (1, '2024-04-02', '19:20:00', '1', 'registrando a saida');

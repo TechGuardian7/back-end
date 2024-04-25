@@ -1,6 +1,6 @@
 package techguardian.api.dto;
 
-public class DadosSaida {
+public class OutputDTO {
 
     private String dataSaida;
     private String horaSaida;
