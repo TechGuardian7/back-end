@@ -4,9 +4,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -32,25 +40,56 @@ public class RecordController {
     private OutputService outputService;
 
     @GetMapping("/entrada")
-    public ResponseEntity<byte[]> recordInput() {
+    public ResponseEntity<byte[]> generateExcel() {
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Registro_Entrada");
 
             List<Input> inputs = inputService.findAll();
 
+            CellStyle headerStyle = workbook.createCellStyle();
+            Font headerFont = workbook.createFont();
+            headerFont.setBold(true);
+            headerStyle.setFont(headerFont);
+            headerStyle.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
+            headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            headerStyle.setBorderBottom(BorderStyle.THIN);
+            headerStyle.setBorderTop(BorderStyle.THIN);
+            headerStyle.setBorderLeft(BorderStyle.THIN);
+            headerStyle.setBorderRight(BorderStyle.THIN);
+            headerStyle.setAlignment(HorizontalAlignment.CENTER);
+
             Row headerRow = sheet.createRow(0);
-            headerRow.createCell(0).setCellValue("Data de Entrada");
-            headerRow.createCell(1).setCellValue("Hora de Entrada");
-            headerRow.createCell(2).setCellValue("Quantidade");
-            headerRow.createCell(3).setCellValue("Observação");
+            headerRow.createCell(0).setCellValue("ID");
+            headerRow.createCell(1).setCellValue("Data de Entrada");
+            headerRow.createCell(2).setCellValue("Hora de Entrada");
+            headerRow.createCell(3).setCellValue("Quantidade de Entrada");
+            headerRow.createCell(4).setCellValue("Observações");
+
+            for (Cell cell : headerRow) {
+                cell.setCellStyle(headerStyle);
+            }
 
             int rowNum = 1;
             for (Input input : inputs) {
                 Row row = sheet.createRow(rowNum++);
-                row.createCell(0).setCellValue(input.getDataEntrada());
-                row.createCell(1).setCellValue(input.getHoraEntrada());
-                row.createCell(2).setCellValue(input.getQuantEntrada());
-                row.createCell(3).setCellValue(input.getObsEntrada());
+                row.createCell(0).setCellValue(input.getId());
+                row.createCell(1).setCellValue(input.getDataEntrada());
+                row.createCell(2).setCellValue(input.getHoraEntrada());
+                row.createCell(3).setCellValue(input.getQuantEntrada());
+                row.createCell(4).setCellValue(input.getObsEntrada());
+
+                for (Cell cell : row) {
+                    cell.setCellStyle(headerStyle);
+                }
+            }
+
+            int rowCount = sheet.getLastRowNum();
+            int columnCount = headerRow.getLastCellNum();
+            CellRangeAddress tableRange = new CellRangeAddress(0, rowCount, 0, columnCount - 1);
+            sheet.setAutoFilter(tableRange);
+
+            for (int i = 0; i < 5; i++) {
+                sheet.autoSizeColumn(i);
             }
 
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -76,11 +115,27 @@ public class RecordController {
 
             List<Output> outputs = outputService.findAll();
 
+            CellStyle headerStyle = workbook.createCellStyle();
+            Font headerFont = workbook.createFont();
+            headerFont.setBold(true);
+            headerStyle.setFont(headerFont);
+            headerStyle.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
+            headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            headerStyle.setBorderBottom(BorderStyle.THIN);
+            headerStyle.setBorderTop(BorderStyle.THIN);
+            headerStyle.setBorderLeft(BorderStyle.THIN);
+            headerStyle.setBorderRight(BorderStyle.THIN);
+            headerStyle.setAlignment(HorizontalAlignment.CENTER);
+
             Row headerRow = sheet.createRow(0);
             headerRow.createCell(0).setCellValue("Data da Saida");
             headerRow.createCell(1).setCellValue("Hora da Saida");
             headerRow.createCell(2).setCellValue("Quantidade");
             headerRow.createCell(3).setCellValue("Observação");
+
+            for (Cell cell : headerRow) {
+                cell.setCellStyle(headerStyle);
+            }
 
             int rowNum = 1;
             for (Output output : outputs) {
@@ -89,6 +144,20 @@ public class RecordController {
                 row.createCell(1).setCellValue(output.getHoraSaida());
                 row.createCell(2).setCellValue(output.getQuantSaida());
                 row.createCell(3).setCellValue(output.getObsSaida());
+
+                for (Cell cell : row) {
+                    cell.setCellStyle(headerStyle);
+                }
+            }
+
+            int rowCount = sheet.getLastRowNum();
+            int columnCount = headerRow.getLastCellNum();
+            CellRangeAddress tableRange = new CellRangeAddress(0, rowCount, 0, columnCount - 1);
+            sheet.setAutoFilter(tableRange);
+
+            // Ajustando largura das colunas automaticamente
+            for (int i = 0; i < 5; i++) {
+                sheet.autoSizeColumn(i);
             }
 
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
