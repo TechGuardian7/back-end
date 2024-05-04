@@ -30,4 +30,23 @@ public class UserService {
         }
         return userRepo.save(user);
     }
+
+    public User updateUser(Long id, User user) {
+        User existUser = userRepo.findById(id)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado - ID: " + id));
+        if (user.getNome() != null) {
+            existUser.setNome(user.getNome());
+        }
+        if (user.getSenha() != null) {
+            existUser.setSenha(user.getSenha());
+        }
+        return userRepo.save(user);
+    }
+
+    public User deleteUser(Long id) {
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado - ID: " + id));
+        userRepo.deleteById(id);
+        return user;
+    }
 }
