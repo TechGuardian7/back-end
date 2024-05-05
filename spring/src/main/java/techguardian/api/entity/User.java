@@ -1,10 +1,16 @@
 package techguardian.api.entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -21,6 +27,13 @@ public class User {
 
     @Column(name = "usr_senha")
     private String senha;
+
+    @ManyToMany
+    @JoinTable(name = "uau_usuario_autorizacao",
+        joinColumns = { @JoinColumn(name = "usr_id")},
+        inverseJoinColumns = { @JoinColumn(name = "aut_id") }
+        )
+    private Set<Authority> autorizacoes = new HashSet<Authority>();
 
     public User(Long id, String nome, String senha) {
         this.id = id;
@@ -50,6 +63,14 @@ public class User {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public Set<Authority> getAutorizacoes() {
+        return autorizacoes;
+    }
+
+    public void setAutorizacoes(Set<Authority> autorizacoes) {
+        this.autorizacoes = autorizacoes;
     }
 
 }
