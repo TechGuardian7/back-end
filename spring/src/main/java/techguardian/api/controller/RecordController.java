@@ -12,6 +12,7 @@ import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xddf.usermodel.chart.AxisCrosses;
+import org.apache.poi.xddf.usermodel.chart.AxisOrientation;
 import org.apache.poi.xddf.usermodel.chart.AxisPosition;
 import org.apache.poi.xddf.usermodel.chart.AxisTickMark;
 import org.apache.poi.xddf.usermodel.chart.ChartTypes;
@@ -60,7 +61,6 @@ public class RecordController {
 
             List<Input> inputs = inputService.findAll();
 
-            // Criando estilo de cabeçalho
             CellStyle headerStyle = workbook.createCellStyle();
             XSSFFont headerFont = workbook.createFont();
             headerFont.setBold(true);
@@ -73,7 +73,6 @@ public class RecordController {
             headerStyle.setBorderRight(BorderStyle.THIN);
             headerStyle.setAlignment(HorizontalAlignment.CENTER);
 
-            // Criando cabeçalho
             XSSFRow headerRow = sheet.createRow(0);
             headerRow.createCell(0).setCellValue("ID");
             headerRow.createCell(1).setCellValue("Data de Entrada");
@@ -81,12 +80,10 @@ public class RecordController {
             headerRow.createCell(3).setCellValue("Quantidade de Entrada");
             headerRow.createCell(4).setCellValue("Observações");
 
-            // Aplicando estilo ao cabeçalho
             for (Cell cell : headerRow) {
                 cell.setCellStyle(headerStyle);
             }
 
-            // Preenchendo dados do banco de dados
             int rowNum = 1;
             for (Input input : inputs) {
                 XSSFRow row = sheet.createRow(rowNum++);
@@ -97,13 +94,6 @@ public class RecordController {
                 row.createCell(4).setCellValue(input.getObsEntrada());
             }
 
-            // Criando tabela
-            int rowCount = sheet.getLastRowNum();
-            int columnCount = headerRow.getLastCellNum();
-            CellRangeAddress tableRange = new CellRangeAddress(0, rowCount, 0, columnCount - 1);
-            sheet.setAutoFilter(tableRange);
-
-            // Criando gráfico de colunas
             XSSFDrawing drawing = sheet.createDrawingPatriarch();
             XSSFClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, 5, 1, 15, 15);
             XSSFChart chart = drawing.createChart(anchor);
@@ -119,25 +109,23 @@ public class RecordController {
             leftAxis.setMajorTickMark(AxisTickMark.OUT);
             leftAxis.setMinorTickMark(AxisTickMark.NONE);
             leftAxis.setCrosses(AxisCrosses.AUTO_ZERO);
+            leftAxis.setOrientation(AxisOrientation.MAX_MIN);
 
-            XDDFDataSource<Double> xs = XDDFDataSourcesFactory.fromNumericCellRange(sheet, new CellRangeAddress(1, rowCount, 3, 3));
-            XDDFNumericalDataSource<Double> ys = XDDFDataSourcesFactory.fromNumericCellRange(sheet, new CellRangeAddress(1, rowCount, 0, 0));
+            XDDFDataSource<String> xs = XDDFDataSourcesFactory.fromStringCellRange(sheet, new CellRangeAddress(1, inputs.size(), 2, 2));
+            XDDFNumericalDataSource<Double> ys = XDDFDataSourcesFactory.fromNumericCellRange(sheet, new CellRangeAddress(1, inputs.size(), 3, 3));
 
             XDDFChartData data = chart.createData(ChartTypes.BAR, bottomAxis, leftAxis);
             XDDFChartData.Series series = data.addSeries(xs, ys);
             series.setTitle("Quantidade de Entrada", null);
             chart.plot(data);
 
-            // Ajustando largura das colunas automaticamente
             for (int i = 0; i < 5; i++) {
                 sheet.autoSizeColumn(i);
             }
 
-            // Escrevendo o arquivo Excel em um ByteArrayOutputStream
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             workbook.write(outputStream);
 
-            // Definindo os cabeçalhos da resposta HTTP
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
             headers.setContentDispositionFormData("filename", "Registro_Entrada.xlsx");
@@ -178,12 +166,10 @@ public class RecordController {
             headerRow.createCell(3).setCellValue("Quantidade de Saida");
             headerRow.createCell(4).setCellValue("Observações");
 
-            // Aplicando estilo ao cabeçalho
             for (Cell cell : headerRow) {
                 cell.setCellStyle(headerStyle);
             }
 
-            // Preenchendo dados do banco de dados
             int rowNum = 1;
             for (Output output : outputs) {
                 XSSFRow row = sheet.createRow(rowNum++);
@@ -194,13 +180,11 @@ public class RecordController {
                 row.createCell(4).setCellValue(output.getObsSaida());
             }
 
-            // Criando tabela
             int rowCount = sheet.getLastRowNum();
             int columnCount = headerRow.getLastCellNum();
             CellRangeAddress tableRange = new CellRangeAddress(0, rowCount, 0, columnCount - 1);
             sheet.setAutoFilter(tableRange);
 
-            // Criando gráfico de colunas
             XSSFDrawing drawing = sheet.createDrawingPatriarch();
             XSSFClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, 5, 1, 15, 15);
             XSSFChart chart = drawing.createChart(anchor);
@@ -216,25 +200,23 @@ public class RecordController {
             leftAxis.setMajorTickMark(AxisTickMark.OUT);
             leftAxis.setMinorTickMark(AxisTickMark.NONE);
             leftAxis.setCrosses(AxisCrosses.AUTO_ZERO);
+            leftAxis.setOrientation(AxisOrientation.MAX_MIN);
 
-            XDDFDataSource<Double> xs = XDDFDataSourcesFactory.fromNumericCellRange(sheet, new CellRangeAddress(1, rowCount, 3, 3));
-            XDDFNumericalDataSource<Double> ys = XDDFDataSourcesFactory.fromNumericCellRange(sheet, new CellRangeAddress(1, rowCount, 0, 0));
+            XDDFDataSource<String> xs = XDDFDataSourcesFactory.fromStringCellRange(sheet, new CellRangeAddress(1, outputs.size(), 2, 2));
+            XDDFNumericalDataSource<Double> ys = XDDFDataSourcesFactory.fromNumericCellRange(sheet, new CellRangeAddress(1, outputs.size(), 3, 3));
 
             XDDFChartData data = chart.createData(ChartTypes.BAR, bottomAxis, leftAxis);
             XDDFChartData.Series series = data.addSeries(xs, ys);
             series.setTitle("Quantidade de Saida", null);
             chart.plot(data);
 
-            // Ajustando largura das colunas automaticamente
             for (int i = 0; i < 5; i++) {
                 sheet.autoSizeColumn(i);
             }
 
-            // Escrevendo o arquivo Excel em um ByteArrayOutputStream
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             workbook.write(outputStream);
 
-            // Definindo os cabeçalhos da resposta HTTP
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
             headers.setContentDispositionFormData("filename", "Registro_Saida.xlsx");
@@ -244,7 +226,6 @@ public class RecordController {
                     .body(outputStream.toByteArray());
         } catch (IOException e) {
             e.printStackTrace();
-            // Tratamento de erro
             return ResponseEntity.badRequest().build();
         }
     }
