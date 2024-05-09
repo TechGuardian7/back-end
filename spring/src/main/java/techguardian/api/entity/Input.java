@@ -25,8 +25,8 @@ public class Input {
     @Column(name = "quant_entrada")
     private Integer quantEntrada;
     
-    @Column(name = "obs_entrada")
-    private String obsEntrada;
+    @Column(name = "status_entrada")
+    private String status;
 
     public Long getId() {
         return id;
@@ -60,11 +60,12 @@ public class Input {
         this.quantEntrada = quantEntrada;
     }
 
-    public String getObsEntrada() {
-        return obsEntrada;
+    public String getStatus() {
+        return status;
     }
 
-    public void setObsEntrada(String obsEntrada) {
-        this.obsEntrada = obsEntrada;
+    public void setStatus(String status) {
+        this.status = status;
     }
+    
 }

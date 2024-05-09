@@ -22,11 +22,11 @@ public class Output {
     @Column(name = "hora_saida")
     private String horaSaida;
 
-    @Column(name = "quantSaida")
+    @Column(name = "quant_saida")
     private Integer quantSaida;
     
-    @Column(name = "obs_saida")
-    private String obsSaida;
+    @Column(name = "status_saida")
+    private String status;
 
     public Long getId() {
         return id;
@@ -60,11 +60,12 @@ public class Output {
         this.quantSaida = quantSaida;
     }
 
-    public String getObsSaida() {
-        return obsSaida;
+    public String getStatus() {
+        return status;
     }
 
-    public void setObsSaida(String obsSaida) {
-        this.obsSaida = obsSaida;
+    public void setStatus(String status) {
+        this.status = status;
     }
+
 }
