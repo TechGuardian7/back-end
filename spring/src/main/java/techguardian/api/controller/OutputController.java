@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import techguardian.api.dto.OutputDTO;
 import techguardian.api.entity.Output;
 import techguardian.api.service.OutputService;
 
@@ -24,28 +23,28 @@ import techguardian.api.service.OutputService;
 public class OutputController {
 
     @Autowired
-    private OutputService saidaService;
+    private OutputService outService;
 
     @GetMapping("/registro/saida")
     public List<Output> findAll() {
-        return saidaService.findAll();
+        return outService.findAll();
     }
 
     @PostMapping("/saida")
-    public void createOutput(@RequestBody OutputDTO dadosSaida) {
-        saidaService.createOutput(dadosSaida);
+    public Output createOutput(@RequestBody Output output) {
+        return outService.createOutput(output);
     }
 
     @PutMapping("/saida/{id}")
-    public ResponseEntity<String> updateOutput(@PathVariable Long id, @RequestBody OutputDTO dadosSaida) {
-        saidaService.updateOutput(id, dadosSaida);
-        return ResponseEntity.ok("Saida atualizada com sucesso");
+    public ResponseEntity<Output> updateOutput(@PathVariable Long id, @RequestBody Output output) {
+        Output updatedOutput = outService.updateOutput(id, output);
+        return ResponseEntity.ok(updatedOutput);
     }
 
     @DeleteMapping("/saida/{id}")
     public ResponseEntity<String> deleteOutput(@PathVariable Long id) {
         try {
-            saidaService.deleteOutput(id);
+            outService.deleteOutput(id);
             return ResponseEntity.ok("Saida com o ID " + id + " foi deletada com sucesso.");
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

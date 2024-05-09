@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import techguardian.api.dto.InputDTO;
 import techguardian.api.entity.Input;
 import techguardian.api.service.InputService;
 
@@ -24,28 +23,27 @@ import techguardian.api.service.InputService;
 public class InputController {
 
     @Autowired
-    private InputService entradaService;
+    private InputService inputService;
 
     @GetMapping("/registro/entrada")
     public List<Input> findAll() {
-        return entradaService.findAll();
+        return inputService.findAll();
     }
 
     @PostMapping("/entrada")
-    public void createInput(@RequestBody InputDTO dadosEntrada) {
-        entradaService.createInput(dadosEntrada);
+    public Input createInput(@RequestBody Input input) {
+        return inputService.createInput(input);
     }
 
     @PutMapping("/entrada/{id}")
-    public ResponseEntity<String> updateInput(@PathVariable Long id, @RequestBody InputDTO dadosEntrada) {
-        entradaService.updateInput(id, dadosEntrada);
-        return ResponseEntity.ok("Entrada atualizada com sucesso");
+    public ResponseEntity<Input> updateInput(@PathVariable Long id, @RequestBody Input input) {
+        Input updatedInput = inputService.updateInput(id, input);
+        return ResponseEntity.ok(updatedInput);
     }
-
     @DeleteMapping("/entrada/{id}")
     public ResponseEntity<String> deleteInput(@PathVariable Long id) {
         try {
-            entradaService.deleteInput(id);
+            inputService.deleteInput(id);
             return ResponseEntity.ok("Entrada com o ID " + id + " foi deletada com sucesso.");
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

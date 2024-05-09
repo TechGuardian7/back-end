@@ -1,13 +1,13 @@
 package techguardian.api.service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.server.ResponseStatusException;
 
-import techguardian.api.dto.InputDTO;
 import techguardian.api.entity.Input;
 import techguardian.api.repository.InputRepository;
 
@@ -15,42 +15,49 @@ import techguardian.api.repository.InputRepository;
 public class InputService {
 
     @Autowired
-    private InputRepository entradaRepo;
+    private InputRepository inputRepo;
 
     public List<Input> findAll() {
-        return entradaRepo.findAll();
+        return inputRepo.findAll();
     }
 
-    public void createInput(InputDTO dadosEntrada) {
-        Input registroEntrada = new Input();
-        registroEntrada.setDataEntrada(dadosEntrada.getDataEntrada());
-        registroEntrada.setHoraEntrada(dadosEntrada.getHoraEntrada());
-        registroEntrada.setQuantEntrada(dadosEntrada.getQuantEntrada());
-        registroEntrada.setObsEntrada(dadosEntrada.getObsEntrada());
+    public Input createInput(Input createdInput) {
+        Input input = new Input();
+        input.setDataEntrada(createdInput.getDataEntrada());
+        input.setHoraEntrada(createdInput.getHoraEntrada());
+        input.setQuantEntrada(createdInput.getQuantEntrada());
+        input.setStatus(createdInput.getStatus());
 
-        entradaRepo.save(registroEntrada);
+        return inputRepo.save(input);
     }
 
-    public void updateInput(Long id, InputDTO dadosEntrada) {
-        Optional<Input> optionalEntrada = entradaRepo.findById(id);
-        if (optionalEntrada.isPresent()) {
-            Input entradaExistente = optionalEntrada.get();
-            entradaExistente.setDataEntrada(dadosEntrada.getDataEntrada());
-            entradaExistente.setHoraEntrada(dadosEntrada.getHoraEntrada());
-            entradaExistente.setQuantEntrada(dadosEntrada.getQuantEntrada());
-            entradaExistente.setObsEntrada(dadosEntrada.getObsEntrada());
-            entradaRepo.save(entradaExistente);
-        } else {
-            throw new NoSuchElementException("Entrada com o ID " + id + " não encontrada");
-        }
+    public Input updateInput(Long id, Input updatedInput) {
+        Input existInput = inputRepo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Entrada não encontrada - ID: " + id));
+
+    if (!ObjectUtils.isEmpty(updatedInput.getDataEntrada())) {
+        existInput.setDataEntrada(updatedInput.getDataEntrada());    
     }
 
-    public void deleteInput(Long id) {
-        Optional<Input> optionalEntrada = entradaRepo.findById(id);
-        if (optionalEntrada.isPresent()) {
-            entradaRepo.deleteById(id);
-        } else {
-            throw new NoSuchElementException("Entrada com o ID " + id + " não encontrada");
-        }
+    if (!ObjectUtils.isEmpty(updatedInput.getHoraEntrada())) {
+        existInput.setHoraEntrada(updatedInput.getHoraEntrada());
+    }
+
+    if (!ObjectUtils.isEmpty(updatedInput.getQuantEntrada())) {
+        existInput.setQuantEntrada(updatedInput.getQuantEntrada());
+    }
+
+    if (!ObjectUtils.isEmpty(updatedInput.getStatus())) {
+        existInput.setStatus(updatedInput.getStatus());
+    }
+
+    return inputRepo.save(existInput);
+    }
+
+    public Input deleteInput(Long id) {
+        Input input = inputRepo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado - ID: " + id));
+        inputRepo.deleteById(id);
+        return input;
     }
 }

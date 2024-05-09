@@ -1,13 +1,13 @@
 package techguardian.api.service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.server.ResponseStatusException;
 
-import techguardian.api.dto.OutputDTO;
 import techguardian.api.entity.Output;
 import techguardian.api.repository.OutputRepository;
 
@@ -15,42 +15,49 @@ import techguardian.api.repository.OutputRepository;
 public class OutputService {
 
     @Autowired
-    private OutputRepository saidaRepo;
+    private OutputRepository outRepo;
 
     public List<Output> findAll() {
-        return saidaRepo.findAll();
+        return outRepo.findAll();
     }
 
-    public void createOutput(OutputDTO dadosSaida) {
-        Output registroSaida = new Output();
-        registroSaida.setDataSaida(dadosSaida.getDataSaida());
-        registroSaida.setHoraSaida(dadosSaida.getHoraSaida());
-        registroSaida.setQuantSaida(dadosSaida.getQuantSaida());
-        registroSaida.setObsSaida(dadosSaida.getObsSaida());
+    public Output createOutput(Output createdOutput) {
+        Output output = new Output();
+        output.setDataSaida(createdOutput.getDataSaida());
+        output.setHoraSaida(createdOutput.getHoraSaida());
+        output.setQuantSaida(createdOutput.getQuantSaida());
+        output.setStatus(createdOutput.getStatus());
 
-        saidaRepo.save(registroSaida);
+        return outRepo.save(output);
     }
 
-    public void updateOutput(Long id, OutputDTO dadosSaida) {
-        Optional<Output> optionalEntrada = saidaRepo.findById(id);
-        if (optionalEntrada.isPresent()) {
-            Output entradaExistente = optionalEntrada.get();
-            entradaExistente.setDataSaida(dadosSaida.getDataSaida());
-            entradaExistente.setHoraSaida(dadosSaida.getHoraSaida());
-            entradaExistente.setQuantSaida(dadosSaida.getQuantSaida());
-            entradaExistente.setObsSaida(dadosSaida.getObsSaida());
-            saidaRepo.save(entradaExistente);
-        } else {
-            throw new NoSuchElementException("Saida com o ID " + id + " não encontrada");
-        }
+    public Output updateOutput(Long id, Output updatedOutput) {
+        Output existOutput = outRepo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Saída não encontrada - ID: " + id));
+
+    if (!ObjectUtils.isEmpty(updatedOutput.getDataSaida())) {
+        existOutput.setDataSaida(updatedOutput.getDataSaida());    
     }
 
-    public void deleteOutput(Long id) {
-        Optional<Output> optionalSaida = saidaRepo.findById(id);
-        if (optionalSaida.isPresent()) {
-            saidaRepo.deleteById(id);
-        } else {
-            throw new NoSuchElementException("Saida com o ID " + id + " não encontrada");
-        }
+    if (!ObjectUtils.isEmpty(updatedOutput.getHoraSaida())) {
+        existOutput.setHoraSaida(updatedOutput.getHoraSaida());
+    }
+
+    if (!ObjectUtils.isEmpty(updatedOutput.getQuantSaida())) {
+        existOutput.setQuantSaida(updatedOutput.getQuantSaida());
+    }
+
+    if (!ObjectUtils.isEmpty(updatedOutput.getStatus())) {
+        existOutput.setStatus(updatedOutput.getStatus());
+    }
+
+    return outRepo.save(existOutput);
+    }
+
+    public Output deleteOutput(Long id) {
+        Output output = outRepo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Saída não encontrado - ID: " + id));
+        outRepo.deleteById(id);
+        return output;
     }
 }

@@ -91,7 +91,7 @@ public class RecordController {
                 row.createCell(1).setCellValue(input.getDataEntrada());
                 row.createCell(2).setCellValue(input.getHoraEntrada());
                 row.createCell(3).setCellValue(input.getQuantEntrada());
-                row.createCell(4).setCellValue(input.getObsEntrada());
+                row.createCell(4).setCellValue(input.getStatus());
             }
 
             XSSFDrawing drawing = sheet.createDrawingPatriarch();
@@ -177,7 +177,7 @@ public class RecordController {
                 row.createCell(1).setCellValue(output.getDataSaida());
                 row.createCell(2).setCellValue(output.getHoraSaida());
                 row.createCell(3).setCellValue(output.getQuantSaida());
-                row.createCell(4).setCellValue(output.getObsSaida());
+                row.createCell(4).setCellValue(output.getStatus());
             }
 
             int rowCount = sheet.getLastRowNum();
