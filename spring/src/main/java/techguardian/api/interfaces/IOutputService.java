@@ -9,5 +9,5 @@ public interface IOutputService {
     List<Output> findAll();
     Output createOutput(Output createdOutput);
     Output updateOutput(Long id, Output updatedOutput);
-    Output deletarSaida (Long id);
+    Output deleteOutput (Long id);
 }
