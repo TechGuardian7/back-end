@@ -25,7 +25,7 @@ public class Input {
     @Column(name = "quant_entrada")
     private Integer quantEntrada;
     
-    @Column(name = "status")
+    @Column(name = "status_entrada")
     private String status;
 
     public Long getId() {

@@ -22,10 +22,10 @@ public class Output {
     @Column(name = "hora_saida")
     private String horaSaida;
 
-    @Column(name = "quantSaida")
+    @Column(name = "quant_saida")
     private Integer quantSaida;
     
-    @Column(name = "status")
+    @Column(name = "status_saida")
     private String status;
 
     public Long getId() {
